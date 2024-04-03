@@ -5,15 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float movementSpeed; //La velocidad del Player
-    // Start is called before the first frame update
+    public float dirX;
+    
     void Start()
     {
-        
+       
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
-        
+        dirX = Input.GetAxis("Horizontal");
+        transform.Translate(Vector3.right * dirX * movementSpeed);
+
     }
 }

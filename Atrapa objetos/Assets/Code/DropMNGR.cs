@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class DropMNGR : MonoBehaviour
 {
-    public float timerDrop; //El tiempo que va a dropear cada objeto
-    public GameObject collect; //El coleccionable
+    public float timerDrop = 0.5f; //El tiempo que va a dropear cada objeto
+    public GameObject[] aceiteCollect; //El objeto coleccionable
     public GameObject powerUp; //El powerUp
     public GameObject spawner; //El spawn de los objetos
     public int amountSpawners; //La cantidad de spawners que tendremos en la escena
@@ -13,7 +13,7 @@ public class DropMNGR : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(aceiteSpawn());
     }
 
     // Update is called once per frame
@@ -21,4 +21,11 @@ public class DropMNGR : MonoBehaviour
     {
         
     }
+
+    IEnumerator aceiteSpawn()
+    {
+        yield return new WaitForSeconds(timerDrop);
+    }
+    
+ 
 }
