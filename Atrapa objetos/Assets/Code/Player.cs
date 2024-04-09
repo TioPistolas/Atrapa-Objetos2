@@ -20,6 +20,7 @@ public class Player : MonoBehaviour
         dirX = Input.GetAxis("Horizontal");
         transform.Translate(Vector3.right * dirX * movementSpeed);
 
+
         if (!WiimoteManager.HasWiimote()) { return; }
         
         wiimote = WiimoteManager.Wiimotes[0];
@@ -30,10 +31,12 @@ public class Player : MonoBehaviour
             ret = wiimote.ReadWiimoteData();
 
             //AGREGAR EL TRANSLATE AQUI (Algo así?)
-            print(GetAccelVector());
-            //transform.Translate(GetAccelVector().x * dirX * movementSpeed);
+            
+            //transform.Translate(GetPointingVector().x * dirX * movementSpeed);
             
 	    } while (ret > 0);
+
+        print(GetPointingVector());
     }
 
 
@@ -44,10 +47,10 @@ public class Player : MonoBehaviour
 	    WiimoteManager.FindWiimotes();
 
 	    foreach(Wiimote remote in WiimoteManager.Wiimotes) {
-            remote.Accel.CalibrateAccel(0);
+            remote.Accel.CalibrateAccel((AccelCalibrationStep)2);
             remote.SendPlayerLED(true, false, false, false);
-            remote.SetupIRCamera(IRDataType.EXTENDED);
-            //remote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
+            //remote.SetupIRCamera(IRDataType.EXTENDED);
+            remote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
 	    }
     }
 
@@ -57,7 +60,7 @@ public class Player : MonoBehaviour
         wiimote = null;
     }
 
-    private Vector3 GetAccelVector()
+    private Vector3 GetAccelVector() // Rotación de Wiimote
     {
         float accel_x;
         float accel_y;
@@ -69,5 +72,17 @@ public class Player : MonoBehaviour
         accel_z = -accel[1];
 
         return new Vector3(accel_x, accel_y, accel_z);
+    }
+
+    private Vector2 GetPointingVector() //Puntero de Wiimote
+    {
+        float point_x;
+        float point_y;
+
+        float[] point = wiimote.Ir.GetPointingPosition();
+        point_x = point[0];
+        point_y = point[1];
+
+        return new Vector2(point_x,point_y);
     }
 }
