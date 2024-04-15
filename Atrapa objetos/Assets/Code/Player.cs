@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private Wiimote wiimote;
     public float movementSpeed; //La velocidad del Player
     public float dirX;
+    private bool calibrated;
     
     void Start()
     {
@@ -17,8 +18,8 @@ public class Player : MonoBehaviour
    
     void Update()
     {
-        dirX = Input.GetAxis("Horizontal");
-        transform.Translate(Vector3.right * dirX * movementSpeed);
+        //dirX = Input.GetAxis("Horizontal");
+        //transform.Translate(Vector3.right * dirX * movementSpeed);
 
 
         if (!WiimoteManager.HasWiimote()) { return; }
@@ -30,13 +31,25 @@ public class Player : MonoBehaviour
 	    {
             ret = wiimote.ReadWiimoteData();
 
-            //AGREGAR EL TRANSLATE AQUI (Algo así?)
-            
-            //transform.Translate(GetPointingVector().x * dirX * movementSpeed);
+            if (Input.GetKeyDown(KeyCode.Space)) // Calibrar presionando Barra Espaciadora
+            {
+                wiimote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
+                wiimote.Accel.CalibrateAccel((AccelCalibrationStep)0);
+                wiimote.SetupIRCamera(IRDataType.EXTENDED);
+                Debug.Log("Wiimote Calibrated");
+                calibrated = true;
+            }
             
 	    } while (ret > 0);
+        
 
-        print(GetPointingVector());
+        if(calibrated && GetPointingVector().x != -1f) //Mover Barra dependiendo de a donde apunta wl Wiimote
+        {
+            if(GetPointingVector().x <= 0.5f){ dirX = -1; }  else{ dirX = 1; } // Punto medio = 0.5f   Menor = Izquierda & Mayor = Derecha
+            //float[,] ir = wiimote.Ir.GetProbableSensorBarIR();
+            transform.Translate(Vector3.right * dirX * movementSpeed);
+            //print(GetPointingVector().x);
+        }
     }
 
 
@@ -47,10 +60,7 @@ public class Player : MonoBehaviour
 	    WiimoteManager.FindWiimotes();
 
 	    foreach(Wiimote remote in WiimoteManager.Wiimotes) {
-            remote.Accel.CalibrateAccel((AccelCalibrationStep)2);
             remote.SendPlayerLED(true, false, false, false);
-            //remote.SetupIRCamera(IRDataType.EXTENDED);
-            remote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
 	    }
     }
 
