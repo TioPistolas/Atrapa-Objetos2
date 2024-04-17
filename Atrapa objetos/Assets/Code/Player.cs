@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     
     void Start()
     {
-       InitWiimotes();
+       //InitWiimotes();
+       wiimote = MenuManager.wiimote;
+       
     }
 
    
@@ -20,36 +22,39 @@ public class Player : MonoBehaviour
     {
         //dirX = Input.GetAxis("Horizontal");
         //transform.Translate(Vector3.right * dirX * movementSpeed);
-
-
-        if (!WiimoteManager.HasWiimote()) { return; }
         
-        wiimote = WiimoteManager.Wiimotes[0];
+
+        if (wiimote == null) { return; }
 
         int ret;
          do
 	    {
             ret = wiimote.ReadWiimoteData();
 
-            if (Input.GetKeyDown(KeyCode.Space)) // Calibrar presionando Barra Espaciadora
+            //if (Input.GetKeyDown(KeyCode.Space))
+            if (!calibrated) // Calibrar presionando Barra Espaciadora
             {
                 wiimote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
                 wiimote.Accel.CalibrateAccel((AccelCalibrationStep)0);
                 wiimote.SetupIRCamera(IRDataType.EXTENDED);
-                Debug.Log("Wiimote Calibrated");
                 calibrated = true;
             }
-            
 	    } while (ret > 0);
         
 
-        if(calibrated && GetPointingVector().x != -1f) //Mover Barra dependiendo de a donde apunta wl Wiimote
+        if(calibrated && GetPointingVector().x != -1f) //Mover Barra dependiendo de a donde apunta el Wiimote
         {
-            if(GetPointingVector().x <= 0.5f){ dirX = -1; }  else{ dirX = 1; } // Punto medio = 0.5f   Menor = Izquierda & Mayor = Derecha
-            //float[,] ir = wiimote.Ir.GetProbableSensorBarIR();
-            transform.Translate(Vector3.right * dirX * movementSpeed);
-            //print(GetPointingVector().x);
-        }
+            /*--------------  MOVIMIENTO 1  --------------*/
+            if(GetPointingVector().x <= 0.5f){ dirX = -1; }  else{ dirX = 1;}
+            Vector3 movement = Vector3.right * dirX * movementSpeed;
+            transform.Translate(movement);
+
+            /*--------------  MOVIMIENTO 2  --------------*/
+            //Vector3 movement = new Vector3((Mathf.Pow(GetPointingVector().x,2f) * 1f) - GetPointingVector().x,0,0);
+            //transform.Translate(movement);
+
+            print(movement);
+        } 
     }
 
 
