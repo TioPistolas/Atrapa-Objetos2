@@ -5,14 +5,15 @@ using WiimoteApi;
 
 public class Player : MonoBehaviour
 {
-    private Wiimote wiimote;
+    private Wiimote wiimote; // El control de Wii
     public float movementSpeed; //La velocidad del Player
-    public float dirX;
-    private bool calibrated;
+    private bool calibrated; //checar si el wiimote está calibrado
+    private Vector3 movement; //el movimiento del jugador
+    [SerializeField] private float minTras;
+    [SerializeField] private float maxTras;
     
     void Start()
     {
-       //InitWiimotes();
        wiimote = MenuManager.wiimote;
        
     }
@@ -31,8 +32,7 @@ public class Player : MonoBehaviour
 	    {
             ret = wiimote.ReadWiimoteData();
 
-            //if (Input.GetKeyDown(KeyCode.Space))
-            if (!calibrated) // Calibrar presionando Barra Espaciadora
+            if (!calibrated)
             {
                 wiimote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
                 wiimote.Accel.CalibrateAccel((AccelCalibrationStep)0);
@@ -42,33 +42,20 @@ public class Player : MonoBehaviour
 	    } while (ret > 0);
         
 
-        if(calibrated && GetPointingVector().x != -1f) //Mover Barra dependiendo de a donde apunta el Wiimote
+        if(calibrated) //Mover Barra dependiendo de a donde apunta el Wiimote, evitando salirse de la pantalla
         {
-            /*--------------  MOVIMIENTO 1  --------------*/
-            if(GetPointingVector().x <= 0.5f){ dirX = -1; }  else{ dirX = 1;}
-            Vector3 movement = Vector3.right * dirX * movementSpeed;
-            transform.Translate(movement);
-
-            /*--------------  MOVIMIENTO 2  --------------*/
-            //Vector3 movement = new Vector3((Mathf.Pow(GetPointingVector().x,2f) * 1f) - GetPointingVector().x,0,0);
-            //transform.Translate(movement);
-
-            print(movement);
-        } 
+            if(GetPointingVector().x != -1f)
+            {
+                movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
+            }
+            transform.Translate(movement * movementSpeed);
+            transform.position = new Vector3(Mathf.Clamp(transform.position.x, minTras, maxTras), transform.position.y, transform.position.z);
+        }
     }
 
 
 
-    //WIIMOTE
-    void InitWiimotes() // Busca WiiMotes & Cambia LEDs
-    {
-	    WiimoteManager.FindWiimotes();
-
-	    foreach(Wiimote remote in WiimoteManager.Wiimotes) {
-            remote.SendPlayerLED(true, false, false, false);
-	    }
-    }
-
+    // ============ WIIMOTE ============
     void CleanWiimotes() //Desconecta Wiimotes
     {
         WiimoteManager.Cleanup(wiimote);
