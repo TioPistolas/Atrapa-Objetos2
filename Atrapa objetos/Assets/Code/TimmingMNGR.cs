@@ -24,6 +24,7 @@ public class TimmingMNGR : MonoBehaviour
         
         if (tiempoActivado)
         {
+            timmerText.text = Mathf.Floor(timmerActual).ToString();
             cambiarContador();
         }
     }
@@ -31,7 +32,7 @@ public class TimmingMNGR : MonoBehaviour
     public void cambiarContador()
     {
         timmerActual -= Time.deltaTime;
-        if(timmerActual <= 0)
+        if(timmerActual < 0.99f)
         {
             Debug.Log("derrota");
             cambiarTemporizador(false);
@@ -47,7 +48,6 @@ public class TimmingMNGR : MonoBehaviour
     {
         timmerActual = tiempoMaximo;
         cambiarTemporizador(true);
-        timmerText.text = timmerActual.ToString();
     }
 
     public void desactivarTemporizador()

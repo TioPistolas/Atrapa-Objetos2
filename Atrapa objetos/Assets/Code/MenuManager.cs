@@ -7,25 +7,42 @@ using WiimoteApi;
 
 public class MenuManager : MonoBehaviour
 {
-    public Text connectText;
     public static Wiimote wiimote;
+    public static float speed;
+
+    public Text connectText, speedText;
+    public Slider speedSlider;
+    public Canvas[] canvases;
+
+
     private void Start(){
+        _OpenCanvas(0);
         connectText.enabled = false;
+
+        if(wiimote == null){
+            speed = 1f;
+        }
+        speedSlider.value = speed * 10f;
+        speedText.text = "VELOCIDAD: " + speed + "x";
     }
 
 
 
 
-    void _ChangeScene(int newScene){ //Cambia Escena
-        SceneManager.LoadScene(newScene);             
-    }
-
-    public void _CheckWiimote(){    //Checar si hay wiimote conectado para poder Jugar
+    public void _Play(){                    //Checar si hay wiimote conectado para poder Jugar
         if(wiimote != null){
-            _ChangeScene(1);
+            SceneManager.LoadScene(1);  
         } else {
             SetConnectionText(false);
         }
+    }
+
+    public void _OpenCanvas(int index){    //Abrir canvas
+        foreach (Canvas canvas in canvases)
+        {
+            canvas.enabled = false;
+        }
+        canvases[index].enabled = true;
     }
 
     public void _ConnectWiimote()    //Conecta el wiimote
@@ -41,6 +58,11 @@ public class MenuManager : MonoBehaviour
 	    }
         
         SetConnectionText(true);
+    }
+
+    public void _ChangeSpeed(){
+        speed = speedSlider.value/10f;
+        speedText.text = "VELOCIDAD: " + speed + "x";
     }
 
     private void SetConnectionText(bool connected){    //Texto que muestra si mando está conectado

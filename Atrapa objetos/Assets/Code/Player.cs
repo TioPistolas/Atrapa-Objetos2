@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     void Start()
     {
        wiimote = MenuManager.wiimote;
+       movementSpeed *= MenuManager.speed;
        
     }
 
@@ -56,12 +57,6 @@ public class Player : MonoBehaviour
 
 
     // ============ WIIMOTE ============
-    void CleanWiimotes() //Desconecta Wiimotes
-    {
-        WiimoteManager.Cleanup(wiimote);
-        wiimote = null;
-    }
-
     private Vector3 GetAccelVector() // Rotación de Wiimote
     {
         float accel_x;
