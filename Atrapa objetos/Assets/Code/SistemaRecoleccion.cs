@@ -26,5 +26,11 @@ public class SistemaRecoleccion : MonoBehaviour
             Destroy(collision.gameObject);
             cantidadCollecionable++;
         }
+
+        if (collision.gameObject.CompareTag("CollectorBAD"))
+        {
+            Destroy(collision.gameObject);
+            cantidadCollecionable--;
+        }
     }
 }
