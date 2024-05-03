@@ -1075,18 +1075,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.027513742, y: 0.19941717}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 5.46, y: 4.57}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4.026522, y: 1.3988343}
   m_EdgeRadius: 0
 --- !u!212 &1009411829
 SpriteRenderer:
@@ -1129,8 +1129,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.039215688, g: 0.5647059, b: 0.2784314, a: 1}
+  m_Sprite: {fileID: 21300000, guid: fc8d0c049497e6148b2818325a6bf602, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1148,8 +1148,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009411827}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.2058, y: -4.32, z: 0}
-  m_LocalScale: {x: 2.3424392, y: 1, z: 1}
+  m_LocalPosition: {x: -0.34, y: -3.76, z: 0}
+  m_LocalScale: {x: 0.6001802, y: 0.49684647, z: 0.4696979}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1448,6 +1448,10 @@ MonoBehaviour:
   aceiteCollect:
   - {fileID: 828046812808395618, guid: 583493b4d4f16ba4d9c8910bfb83312c, type: 3}
   - {fileID: 3722694065521351025, guid: 44538ce4ea5b8e142b82ff804159568b, type: 3}
+  - {fileID: 1603760736896027684, guid: 756764ef33b9c96449115bdf6fe5f4be, type: 3}
+  - {fileID: 2904511424879503779, guid: b8ac401e18e2e314fa9cee832be29381, type: 3}
+  - {fileID: 5397953469196896732, guid: 47c8df50dc5a664428cb7cad6bdba399, type: 3}
+  - {fileID: 6604491849322145153, guid: d09d898b5dee7ca488376ca777f1ff36, type: 3}
   powerUp: {fileID: 0}
   spawner: {fileID: 0}
   amountSpawners: 0
