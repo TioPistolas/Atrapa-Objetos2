@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class timmingLVL2 : MonoBehaviour
@@ -35,7 +36,7 @@ public class timmingLVL2 : MonoBehaviour
         timmerActual2 -= 3*Time.deltaTime;
         if (timmerActual2 < 0.99f)
         {
-            //Debug.log("derrota");
+            SceneManager.LoadScene(3);
             cambiarTemporizador2(false);
         }
     }

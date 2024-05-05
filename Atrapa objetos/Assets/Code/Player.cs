@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
     {
        wiimote = MenuManager.wiimote;
        movementSpeed *= MenuManager.speed;
-       
     }
 
    

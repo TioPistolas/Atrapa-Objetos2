@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class TimmingMNGR : MonoBehaviour
@@ -12,6 +13,8 @@ public class TimmingMNGR : MonoBehaviour
     public bool tiempoActivado;
 
     public TextMeshProUGUI timmerText;
+
+    private int scene;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +37,7 @@ public class TimmingMNGR : MonoBehaviour
         timmerActual -= Time.deltaTime;
         if(timmerActual < 0.99f)
         {
-            Debug.Log("derrota");
+            SceneManager.LoadScene(2); 
             cambiarTemporizador(false);
         }
     }
