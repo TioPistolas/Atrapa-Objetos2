@@ -7,6 +7,7 @@ public class SistemaRecoleccion : MonoBehaviour
 {
     public int cantidadCollecionable;
     public TextMeshProUGUI score;
+    public TextMeshProUGUI score2;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +18,7 @@ public class SistemaRecoleccion : MonoBehaviour
     void Update()
     {
         score.text = cantidadCollecionable.ToString();
+        score2.text = cantidadCollecionable.ToString();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

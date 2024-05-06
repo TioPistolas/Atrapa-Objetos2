@@ -15,10 +15,13 @@ public class TimmingMNGR : MonoBehaviour
     public TextMeshProUGUI timmerText;
 
     private int scene;
+
+    public GameObject CanvaNextScene;
     // Start is called before the first frame update
     void Start()
     {
         ActivarTemporizador();
+        CanvaNextScene.SetActive(false);
     }
 
     // Update is called once per frame
@@ -37,7 +40,9 @@ public class TimmingMNGR : MonoBehaviour
         timmerActual -= Time.deltaTime;
         if(timmerActual < 0.99f)
         {
-            SceneManager.LoadScene(2); 
+            //SceneManager.LoadScene(2);
+            CanvaNextScene.SetActive(true);
+            Time.timeScale = 0f;
             cambiarTemporizador(false);
         }
     }
