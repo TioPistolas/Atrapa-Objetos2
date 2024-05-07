@@ -33,6 +33,11 @@ public class TimmingMNGR : MonoBehaviour
             timmerText.text = Mathf.Floor(timmerActual).ToString();
             cambiarContador();
         }
+
+        if(CanvaNextScene.activeSelf && Player.wiimote.Button.a){
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(2);
+        }
     }
 
     public void cambiarContador()
@@ -40,7 +45,6 @@ public class TimmingMNGR : MonoBehaviour
         timmerActual -= Time.deltaTime;
         if(timmerActual < 0.99f)
         {
-            //SceneManager.LoadScene(2);
             CanvaNextScene.SetActive(true);
             Time.timeScale = 0f;
             cambiarTemporizador(false);

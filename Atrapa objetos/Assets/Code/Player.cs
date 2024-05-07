@@ -5,7 +5,7 @@ using WiimoteApi;
 
 public class Player : MonoBehaviour
 {
-    private Wiimote wiimote; // El control de Wii
+    public static Wiimote wiimote; // El control de Wii
     public float movementSpeed; //La velocidad del Player
     private bool calibrated; //checar si el wiimote está calibrado
     private Vector3 movement; //el movimiento del jugador
