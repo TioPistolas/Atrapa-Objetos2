@@ -12,7 +12,7 @@ public class MenuManager : MonoBehaviour
 
     public Text connectText, speedText;
     public Slider speedSlider;
-    public RectTransform pointer;
+    public GameObject pointer;
     public Canvas[] canvases;
 
     private bool settingsMenu, wiimotePlus, wiimoteMinus, wiimoteChangeSpeed;
@@ -33,10 +33,18 @@ public class MenuManager : MonoBehaviour
     private void Update() {
         //In Settings Menu: Show pointer for reference & Change speed with +/-
         if(settingsMenu && wiimote != null){
-            if(!pointer.gameObject.activeSelf) pointer.gameObject.SetActive(true);
-            float[] pointerPos = wiimote.Ir.GetPointingPosition();
+            if(!pointer.activeSelf) pointer.SetActive(true);
+            /*float[] pointerPos = wiimote.Ir.GetPointingPosition();
             pointer.anchorMin = new Vector2(pointerPos[0], pointerPos[1]);
-            pointer.anchorMax = new Vector2(pointerPos[0], pointerPos[1]);
+            pointer.anchorMax = new Vector2(pointerPos[0], pointerPos[1]);*/
+
+            if(GetPointingVector().x != -1f)
+            {
+                movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
+            }
+            pointer.transform.Translate(movement * speed);
+            pointer.transform.position = new Vector3(Mathf.Clamp(pointer.transform.position.x, -8f, 8f), pointer.transform.position.y, pointer.transform.position.z);
+        
 
             int ret;
             do
@@ -84,7 +92,7 @@ public class MenuManager : MonoBehaviour
             canvas.enabled = false;
         }
         canvases[index].enabled = true;
-        if(index == 1) settingsMenu = true; else  settingsMenu = false;
+        if(index == 1) settingsMenu = true; else  {settingsMenu = false; pointer.SetActive(false);};
     }
 
     public void _ConnectWiimote()    //Conecta el wiimote
@@ -120,5 +128,17 @@ public class MenuManager : MonoBehaviour
             connectText.color = Color.red;
             connectText.text = "Conecta mando de Wii";
         }
+    }
+
+    private Vector2 GetPointingVector() //Puntero de Wiimote
+    {
+        float point_x;
+        float point_y;
+
+        float[] point = wiimote.Ir.GetPointingPosition();
+        point_x = point[0];
+        point_y = point[1];
+
+        return new Vector2(point_x,point_y);
     }
 }
