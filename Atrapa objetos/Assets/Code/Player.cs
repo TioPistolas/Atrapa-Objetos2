@@ -21,36 +21,23 @@ public class Player : MonoBehaviour
    
     void Update()
     {
-        //dirX = Input.GetAxis("Horizontal");
-        //transform.Translate(Vector3.right * dirX * movementSpeed);
-        
-
-        if (wiimote == null) { return; }
+        if (wiimote == null) { return; } else {calibrated = true;}
 
         int ret;
-         do
+        do
 	    {
             ret = wiimote.ReadWiimoteData();
 
-            if (!calibrated)
-            {
-                wiimote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
-                wiimote.Accel.CalibrateAccel((AccelCalibrationStep)0);
-                wiimote.SetupIRCamera(IRDataType.EXTENDED);
-                calibrated = true;
-            }
 	    } while (ret > 0);
         
 
-        if(calibrated) //Mover Barra dependiendo de a donde apunta el Wiimote, evitando salirse de la pantalla
+        //Mover Barra dependiendo de a donde apunta el Wiimote, evitando salirse de la pantalla
+        if(GetPointingVector().x != -1f)
         {
-            if(GetPointingVector().x != -1f)
-            {
-                movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
-            }
-            transform.Translate(movement * movementSpeed);
-            transform.position = new Vector3(Mathf.Clamp(transform.position.x, minTras, maxTras), transform.position.y, transform.position.z);
+            movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
         }
+        transform.Translate(movement * movementSpeed);
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, minTras, maxTras), transform.position.y, transform.position.z);
     }
 
 

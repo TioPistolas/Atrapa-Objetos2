@@ -12,10 +12,11 @@ public class MenuManager : MonoBehaviour
 
     public Text connectText, speedText;
     public Slider speedSlider;
+    public Image battery;
     public GameObject pointer;
     public Canvas[] canvases;
 
-    private bool settingsMenu, wiimotePlus, wiimoteMinus, wiimoteChangeSpeed;
+    private bool wiimotePlus, wiimoteMinus, wiimoteA, settingsMenu, wiimoteChangeSpeed;
     private Vector3 movement;
 
 
@@ -34,17 +35,13 @@ public class MenuManager : MonoBehaviour
         //In Settings Menu: Show pointer for reference & Change speed with +/-
         if(settingsMenu && wiimote != null){
             if(!pointer.activeSelf) pointer.SetActive(true);
-            /*float[] pointerPos = wiimote.Ir.GetPointingPosition();
-            pointer.anchorMin = new Vector2(pointerPos[0], pointerPos[1]);
-            pointer.anchorMax = new Vector2(pointerPos[0], pointerPos[1]);*/
-
+            
             if(GetPointingVector().x != -1f)
             {
                 movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
             }
-            pointer.transform.Translate(movement * speed);
+            pointer.transform.Translate(movement * (speed * 0.2f));
             pointer.transform.position = new Vector3(Mathf.Clamp(pointer.transform.position.x, -8f, 8f), pointer.transform.position.y, pointer.transform.position.z);
-        
 
             int ret;
             do
@@ -56,8 +53,14 @@ public class MenuManager : MonoBehaviour
                 wiimote.SetupIRCamera(IRDataType.EXTENDED);
                 wiimotePlus = wiimote.Button.plus;
                 wiimoteMinus = wiimote.Button.minus;
+                wiimoteA = wiimote.Button.a || wiimote.Button.home;
 	        } while (ret > 0);
             
+            //CHECAR BATERIA
+            wiimote.SendStatusInfoRequest();
+            battery.fillAmount = wiimote.Status.battery_level / 150f;
+            
+            //CAMBIAR VELOCIDAD
             if(wiimoteChangeSpeed){
                 if(wiimotePlus && !wiimoteMinus){
                     speedSlider.value += 1;
