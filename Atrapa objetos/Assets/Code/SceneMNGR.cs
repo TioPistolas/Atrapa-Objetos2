@@ -20,5 +20,6 @@ public class SceneMNGR : MonoBehaviour
     public void _CambiarNivel(int indice)
     {
         SceneManager.LoadScene(indice);
+        Time.timeScale = 1f;
     }
 }

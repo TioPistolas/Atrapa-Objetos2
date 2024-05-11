@@ -26,9 +26,14 @@ public class MenuManager : MonoBehaviour
 
         if(wiimote == null){
             speed = 1f;
+        } else {
+            SetConnectionText(true);
+            pointer.SetActive(true);
         }
         speedSlider.value = speed * 10f;
         speedText.text = "VELOCIDAD: " + speed + "x";
+
+        GameObject.FindGameObjectWithTag("Music").GetComponent<MusicPlayer>().CheckMusic();
     }
 
     private void Update() {
@@ -40,7 +45,7 @@ public class MenuManager : MonoBehaviour
             {
                 movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
             }
-            pointer.transform.Translate(movement * (speed * 0.2f));
+            pointer.transform.Translate(movement * (speed * 1f));
             pointer.transform.position = new Vector3(Mathf.Clamp(pointer.transform.position.x, -8f, 8f), pointer.transform.position.y, pointer.transform.position.z);
 
             int ret;
@@ -100,10 +105,6 @@ public class MenuManager : MonoBehaviour
 
     public void _ConnectWiimote()    //Conecta el wiimote
     {
-        /*foreach(Wiimote remote in WiimoteManager.Wiimotes) {
-		    WiimoteManager.Cleanup(remote);
-	    }*/
-
 	    WiimoteManager.FindWiimotes();
         
         if (!WiimoteManager.HasWiimote()) { return; }
@@ -120,6 +121,13 @@ public class MenuManager : MonoBehaviour
     public void _ChangeSpeed(){
         speed = speedSlider.value/10f;
         speedText.text = "VELOCIDAD: " + speed + "x";
+    }
+
+    public void _ExitGame(){
+        /*foreach(Wiimote remote in WiimoteManager.Wiimotes) {
+		    WiimoteManager.Cleanup(remote);
+	    }*/
+        Application.Quit();
     }
 
     private void SetConnectionText(bool connected){    //Texto que muestra si mando está conectado

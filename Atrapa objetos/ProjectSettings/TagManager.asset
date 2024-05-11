@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Collector1
   - CollectorBAD
+  - Music
   layers:
   - Default
   - TransparentFX

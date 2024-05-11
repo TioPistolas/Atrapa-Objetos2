@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     {
        wiimote = MenuManager.wiimote;
        movementSpeed *= MenuManager.speed;
+       GameObject.FindGameObjectWithTag("Music").GetComponent<MusicPlayer>().CheckMusic();
     }
 
    
