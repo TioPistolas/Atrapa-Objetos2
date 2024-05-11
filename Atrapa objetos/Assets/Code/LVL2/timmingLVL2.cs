@@ -14,10 +14,13 @@ public class timmingLVL2 : MonoBehaviour
     public bool tiempoActivado2;
 
     public TextMeshProUGUI timmerText2;
+
+    public GameObject CanvaNextScene2;
     // Start is called before the first frame update
     void Start()
     {
         ActivarTemporizador2();
+        CanvaNextScene2.SetActive(false);
     }
 
     // Update is called once per frame
@@ -29,6 +32,11 @@ public class timmingLVL2 : MonoBehaviour
             timmerText2.text = Mathf.Floor(timmerActual2).ToString();
             cambiarContador2();
         }
+        if (CanvaNextScene2.activeSelf && Player.wiimote.Button.a)
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(3);
+        }
     }
 
     public void cambiarContador2()
@@ -36,8 +44,15 @@ public class timmingLVL2 : MonoBehaviour
         timmerActual2 -= 3*Time.deltaTime;
         if (timmerActual2 < 0.99f)
         {
-            SceneManager.LoadScene(3);
+            CanvaNextScene2.SetActive(true);
+            Time.timeScale = 0f;
+            //SceneManager.LoadScene(3);
             cambiarTemporizador2(false);
+        }else
+        {
+            
+            Time.timeScale = 1f;
+         
         }
     }
 

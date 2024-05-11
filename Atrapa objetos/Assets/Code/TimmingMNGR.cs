@@ -34,10 +34,11 @@ public class TimmingMNGR : MonoBehaviour
             cambiarContador();
         }
 
-        if(CanvaNextScene.activeSelf && Player.wiimote.Button.a){
+        /*if(CanvaNextScene.activeSelf && Player.wiimote.Button.a){
             Time.timeScale = 1f;
             SceneManager.LoadScene(2);
-        }
+        }*/
+        //Apague esto porque no tengo la antena de wii :c, por cierto, puse que cuando pase al siguiente nivel el timescale se pusiera en 1, esta en el timmingLVL2
     }
 
     public void cambiarContador()
