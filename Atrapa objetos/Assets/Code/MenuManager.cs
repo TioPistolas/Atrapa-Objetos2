@@ -10,13 +10,13 @@ public class MenuManager : MonoBehaviour
     public static Wiimote wiimote;
     public static float speed;
 
-    public Text connectText, speedText;
-    public Slider speedSlider;
+    public Text connectText;
     public Image battery;
-    public GameObject pointer;
+    public RectTransform ir_pointer;
+    public GameObject caja;
     public Canvas[] canvases;
 
-    private bool wiimotePlus, wiimoteMinus, wiimoteA, settingsMenu, wiimoteChangeSpeed;
+    private bool wiimoteA, settingsMenu, wiimoteChangeSpeed, calibrated;
     private Vector3 movement;
 
 
@@ -25,60 +25,38 @@ public class MenuManager : MonoBehaviour
         connectText.enabled = false;
 
         if(wiimote == null){
-            speed = 1f;
+            speed = 0.5f;
         } else {
             SetConnectionText(true);
-            pointer.SetActive(true);
         }
-        speedSlider.value = speed * 10f;
-        speedText.text = "VELOCIDAD: " + speed + "x";
 
         GameObject.FindGameObjectWithTag("Music").GetComponent<MusicPlayer>().CheckMusic();
     }
 
     private void Update() {
-        //In Settings Menu: Show pointer for reference & Change speed with +/-
-        if(settingsMenu && wiimote != null){
-            if(!pointer.activeSelf) pointer.SetActive(true);
+        //In Settings Menu: Mostrar puntero y movimiento de caja
+        if(wiimote != null && settingsMenu){
+            if(!caja.activeSelf) caja.SetActive(true);
+            if(!ir_pointer.gameObject.activeSelf) ir_pointer.gameObject.SetActive(true);
             
-            if(GetPointingVector().x != -1f)
-            {
-                movement = new Vector3((GetPointingVector().x * 2f) - 1f,0,0);
-            }
-            pointer.transform.Translate(movement * (speed * 1f));
-            pointer.transform.position = new Vector3(Mathf.Clamp(pointer.transform.position.x, -8f, 8f), pointer.transform.position.y, pointer.transform.position.z);
-
+            ShowPointer();
+            float posX = (((1f - wiimote.Ir.GetPointingPosition()[1]) * 2f) - 1f) * 8f;
+            print(posX);
+            if(posX != 24)  caja.transform.position = new Vector3(Mathf.Clamp(posX, -8f, 8f), caja.transform.position.y, caja.transform.position.z);
+            
             int ret;
             do
 	        {
                 ret = wiimote.ReadWiimoteData();
-
-                wiimote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
-                wiimote.Accel.CalibrateAccel((AccelCalibrationStep)0);
-                wiimote.SetupIRCamera(IRDataType.EXTENDED);
-                wiimotePlus = wiimote.Button.plus;
-                wiimoteMinus = wiimote.Button.minus;
-                wiimoteA = wiimote.Button.a || wiimote.Button.home;
+                wiimoteA = wiimote.Button.a || wiimote.Button.home || wiimote.Button.b;
 	        } while (ret > 0);
             
             //CHECAR BATERIA
             wiimote.SendStatusInfoRequest();
             battery.fillAmount = wiimote.Status.battery_level / 150f;
-            
-            //CAMBIAR VELOCIDAD
-            if(wiimoteChangeSpeed){
-                if(wiimotePlus && !wiimoteMinus){
-                    speedSlider.value += 1;
-                    _ChangeSpeed();
-                    wiimoteChangeSpeed = false;
-                }
-                else if (!wiimotePlus && wiimoteMinus){
-                    speedSlider.value -= 1;
-                    _ChangeSpeed();
-                    wiimoteChangeSpeed = false;
-                }
-            }
-            if (!wiimotePlus && !wiimoteMinus && !wiimoteChangeSpeed) wiimoteChangeSpeed = true;
+
+            //REGRESAR A MENÚ
+            if(wiimoteA)  {_OpenCanvas(0);}
         }
         
     }
@@ -100,11 +78,13 @@ public class MenuManager : MonoBehaviour
             canvas.enabled = false;
         }
         canvases[index].enabled = true;
-        if(index == 1) settingsMenu = true; else  {settingsMenu = false; pointer.SetActive(false);};
+        if(index == 1) settingsMenu = true; else {settingsMenu = false; caja.SetActive(false); ir_pointer.gameObject.SetActive(false);}
     }
 
     public void _ConnectWiimote()    //Conecta el wiimote
     {
+        WiimoteManager.Wiimotes.Clear();
+        wiimote = null;
 	    WiimoteManager.FindWiimotes();
         
         if (!WiimoteManager.HasWiimote()) { return; }
@@ -113,20 +93,16 @@ public class MenuManager : MonoBehaviour
 
 	    foreach(Wiimote remote in WiimoteManager.Wiimotes) {
             remote.SendPlayerLED(true, false, false, false);
+            remote.SendDataReportMode(InputDataType.REPORT_BUTTONS_ACCEL);
+            remote.Accel.CalibrateAccel((AccelCalibrationStep)0);
+            remote.SetupIRCamera(IRDataType.BASIC);
 	    }
-        
         SetConnectionText(true);
     }
 
-    public void _ChangeSpeed(){
-        speed = speedSlider.value/10f;
-        speedText.text = "VELOCIDAD: " + speed + "x";
-    }
-
     public void _ExitGame(){
-        /*foreach(Wiimote remote in WiimoteManager.Wiimotes) {
-		    WiimoteManager.Cleanup(remote);
-	    }*/
+        WiimoteManager.Wiimotes.Clear();
+        wiimote = null;
         Application.Quit();
     }
 
@@ -141,15 +117,9 @@ public class MenuManager : MonoBehaviour
         }
     }
 
-    private Vector2 GetPointingVector() //Puntero de Wiimote
-    {
-        float point_x;
-        float point_y;
-
-        float[] point = wiimote.Ir.GetPointingPosition();
-        point_x = point[0];
-        point_y = point[1];
-
-        return new Vector2(point_x,point_y);
+    private void ShowPointer(){
+        float[] pointer = wiimote.Ir.GetPointingPosition();
+        ir_pointer.anchorMin = new Vector2(1f - pointer[1],pointer[0]);
+        ir_pointer.anchorMax = new Vector2(1f - pointer[1],pointer[0]);
     }
 }
