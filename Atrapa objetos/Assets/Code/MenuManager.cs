@@ -110,10 +110,10 @@ public class MenuManager : MonoBehaviour
         connectText.enabled = true;
         if(connected){
             connectText.color = Color.green;
-            connectText.text = "Mando de Wii conectado";
+            connectText.text = "Castrol Conectado";
         } else {
             connectText.color = Color.red;
-            connectText.text = "Conecta mando de Wii";
+            connectText.text = "Coencte Castrol";
         }
     }
 

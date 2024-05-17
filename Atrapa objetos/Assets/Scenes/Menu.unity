@@ -593,7 +593,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONECTAR WII
+  m_Text: CONECTAR CASTROL
 --- !u!222 &414359846
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1093,7 +1093,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: JUGAR
+  m_Text: CASTROL INICIA
 --- !u!222 &983810465
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1579,9 +1579,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Conecta mando de Wii
-
-'
+  m_Text: Conecte Castrol
 --- !u!222 &1620503236
 CanvasRenderer:
   m_ObjectHideFlags: 0
